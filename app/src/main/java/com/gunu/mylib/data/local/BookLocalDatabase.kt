@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.gunu.mylib.domain.Book
 
-@Database(entities = [Book::class], version = 1, exportSchema = false)
+@Database(entities = [Book::class], version = 2, exportSchema = false)
 public abstract class BookLocalDatabase: RoomDatabase() {
 
     abstract fun bookDao(): BookDao
