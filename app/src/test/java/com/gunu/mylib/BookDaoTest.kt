@@ -34,10 +34,9 @@ class BookDaoTest {
     fun testInsertTaskAndGetById() = runBlocking {
 
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -46,10 +45,9 @@ class BookDaoTest {
 
         database.bookDao().insertBook(book)
 
-        val loaded = database.bookDao().getBookById(book.id)
+        val loaded = database.bookDao().getBookByIsbn(book.isbn13)
 
         Assert.assertNotNull(loaded)
-        Assert.assertEquals(loaded?.id, book.id)
         Assert.assertEquals(loaded?.title, book.title)
         Assert.assertEquals(loaded?.subtitle, book.subtitle)
         Assert.assertEquals(loaded?.isbn13, book.isbn13)
@@ -62,10 +60,9 @@ class BookDaoTest {
     fun testInsertTaskReplacesOnConflict() = runBlocking {
 
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -73,10 +70,9 @@ class BookDaoTest {
         )
 
         val newBook = Book(
-            id = book.id,
             title = "newtitle",
             subtitle = "newsubtitle",
-            isbn13 = "newisbn13",
+            isbn13 = book.isbn13,
             price = "newprice",
             image = "newimage",
             url = "newurl",
@@ -88,11 +84,10 @@ class BookDaoTest {
         database.bookDao().insertBook(newBook)
 
         // WHEN - Get the task by id from the database
-        val loaded = database.bookDao().getBookById(book.id)
+        val loaded = database.bookDao().getBookByIsbn(book.isbn13)
 
         // THEN - The loaded data contains the expected values
         Assert.assertNotNull(loaded)
-        Assert.assertEquals(loaded?.id, book.id)
         Assert.assertEquals(loaded?.title, newBook.title)
         Assert.assertEquals(loaded?.subtitle, newBook.subtitle)
         Assert.assertEquals(loaded?.isbn13, newBook.isbn13)
@@ -104,10 +99,9 @@ class BookDaoTest {
     @Test
     fun testInsertTaskAndGetTasks() = runBlocking {
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -120,7 +114,6 @@ class BookDaoTest {
         val first = loaded.first()
 
         Assert.assertEquals(loaded.size, 1)
-        Assert.assertEquals(first.id, book.id)
         Assert.assertEquals(first.title, book.title)
         Assert.assertEquals(first.subtitle, book.subtitle)
         Assert.assertEquals(first.isbn13, book.isbn13)
@@ -132,10 +125,9 @@ class BookDaoTest {
     @Test
     fun testUpdateBookmark() = runBlocking {
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -144,12 +136,10 @@ class BookDaoTest {
 
         database.bookDao().insertBook(book)
 
-        database.bookDao().updateBookmark(book.id, true)
+        database.bookDao().updateBookmark(book.isbn13, true)
 
-        val loaded = database.bookDao().getBookById(book.id)
+        val loaded = database.bookDao().getBookByIsbn(book.isbn13)
 
-
-        Assert.assertEquals(loaded?.id, book.id)
         Assert.assertEquals(loaded?.title, book.title)
         Assert.assertEquals(loaded?.subtitle, book.subtitle)
         Assert.assertEquals(loaded?.isbn13, book.isbn13)
@@ -161,10 +151,9 @@ class BookDaoTest {
     @Test
     fun testDeleteById() = runBlocking {
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -173,9 +162,9 @@ class BookDaoTest {
 
         database.bookDao().insertBook(book)
 
-        database.bookDao().deleteBook(book.id)
+        database.bookDao().deleteBook(book.isbn13)
 
-        val loaded = database.bookDao().getBookById(book.id)
+        val loaded = database.bookDao().getBookByIsbn(book.isbn13)
 
         Assert.assertNull(loaded)
     }
@@ -183,10 +172,9 @@ class BookDaoTest {
     @Test
     fun testDeleteAll() = runBlocking {
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -194,10 +182,9 @@ class BookDaoTest {
         )
 
         val newBook = Book(
-            id = book.id,
             title = "newtitle",
             subtitle = "newsubtitle",
-            isbn13 = "newisbn13",
+            isbn13 = book.isbn13,
             price = "newprice",
             image = "newimage",
             url = "newurl",
@@ -218,10 +205,9 @@ class BookDaoTest {
     @Test
     fun testDeleteBookmarked() = runBlocking {
         val book = Book(
-            id = 1,
             title = "title",
             subtitle = "subtitle",
-            isbn13 = "isbn13",
+            isbn13 = 1,
             price = "price",
             image = "image",
             url = "url",
@@ -229,10 +215,9 @@ class BookDaoTest {
         )
 
         val newBook = Book(
-            id = 2,
             title = "newtitle",
             subtitle = "newsubtitle",
-            isbn13 = "newisbn13",
+            isbn13 = 2,
             price = "newprice",
             image = "newimage",
             url = "newurl",
@@ -248,8 +233,7 @@ class BookDaoTest {
         val loaded = database.bookDao().getBooks()
         val first = loaded.first()
         Assert.assertEquals(1, loaded.size)
-        Assert.assertNull(database.bookDao().getBookById(2))
-        Assert.assertEquals(first.id, book.id)
+        Assert.assertNull(database.bookDao().getBookByIsbn(2))
         Assert.assertEquals(first.title, book.title)
         Assert.assertEquals(first.subtitle, book.subtitle)
         Assert.assertEquals(first.isbn13, book.isbn13)

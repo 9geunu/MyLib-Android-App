@@ -18,7 +18,6 @@ package com.gunu.mylib
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.BookResponse
 import com.gunu.mylib.domain.IRepository
 import java.util.*
 
@@ -43,20 +42,24 @@ class FakeRepository : IRepository {
         return observableBookList
     }
 
-    override suspend fun getBooks(): BookResponse {
-        return BookResponse(BookServiceData.values.toList())
+    override suspend fun getBooks(): List<Book> {
+        return BookServiceData.values.toList()
     }
 
-    override suspend fun getBookById(BookId: Long): Book? {
-        return BookServiceData[BookId]
+    override suspend fun searchBooks(query: String): List<Book> {
+        return BookServiceData.values.filter { it.title.contains(query) }
     }
 
-    override suspend fun insertBook(Book: Book) {
-        BookServiceData[Book.id] = Book
+    override suspend fun getBookByIsbn(isbn: Long): Book? {
+        return BookServiceData[isbn]
     }
 
-    override suspend fun updateBookmark(id: Long, isBookmarked: Boolean) {
-        BookServiceData[id]?.isBookmarked = isBookmarked
+    override suspend fun insertBook(book: Book) {
+        BookServiceData[book.isbn13] = book
+    }
+
+    override suspend fun updateBookmark(book: Book, isBookmarked: Boolean) {
+        BookServiceData[book.isbn13]?.isBookmarked = isBookmarked
     }
 
     override suspend fun deleteBookmarkedBooks() {
@@ -71,9 +74,9 @@ class FakeRepository : IRepository {
         observableBookList.value = BookServiceData.values.toList()
     }
 
-    override suspend fun deleteBook(BookId: Long) {
-        BookServiceData.remove(BookId)
+    override suspend fun deleteBook(isbn: Long) {
+        BookServiceData.remove(isbn)
 
-        observableBookList.value = BookServiceData.values.toList()
+        observableBookList.postValue(BookServiceData.values.toList())
     }
 }
