@@ -4,4 +4,5 @@
     <string name="title_newbook">New</string>
     <string name="title_search">Search</string>
     <string name="title_bookmark">Bookmark</string>
+    <string name="str_bookmarked">Bookmarked</string>
 </resources>

@@ -9,17 +9,40 @@
         android:id="@+id/navigation_newbook"
         android:name="com.gunu.mylib.ui.newbook.NewBookFragment"
         android:label="@string/title_newbook"
-        tools:layout="@layout/fragment_newbook" />
+        tools:layout="@layout/fragment_newbook" >
+        <action
+            android:id="@+id/action_navigation_newbook_to_detailBookActivity"
+            app:destination="@id/navigation_detailBook" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.gunu.mylib.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_detailBookActivity"
+            app:destination="@id/navigation_detailBook" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_bookmark"
         android:name="com.gunu.mylib.ui.bookmark.BookmarkFragment"
         android:label="@string/title_bookmark"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_navigation_bookmark_to_detailBookActivity"
+            app:destination="@id/navigation_detailBook" />
+    </fragment>
+    <activity
+        android:id="@+id/navigation_detailBook"
+        android:name="com.gunu.mylib.ui.detail.DetailBookActivity"
+        android:label="activity_detail_book"
+        tools:layout="@layout/activity_detail_book">
+        <argument
+            android:name="bookIsbn"
+            app:argType="long" />
+    </activity>
+
+
 </navigation>
