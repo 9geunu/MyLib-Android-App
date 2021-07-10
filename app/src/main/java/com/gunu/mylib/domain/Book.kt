@@ -8,14 +8,13 @@ import java.util.*
 
 @Entity(tableName = "book")
 data class Book(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
     @SerializedName("title")
     val title: String,
     @SerializedName("subtitle")
     val subtitle: String,
+    @PrimaryKey
     @SerializedName("isbn13")
-    val isbn13: String,
+    val isbn13: Long,
     @SerializedName("price")
     val price: String,
     @SerializedName("image")
@@ -24,4 +23,5 @@ data class Book(
     val url: String,
     var isBookmarked: Boolean = false,
 ) {
+    fun getIsbnString(): String = "isbn13:$isbn13"
 }

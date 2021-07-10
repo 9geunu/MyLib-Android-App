@@ -24,10 +24,11 @@ class BookTest {
 
         val book = Gson().fromJson<Book>(example, object : TypeToken<Book>(){}.type)
 
-        Assert.assertNotNull(book.id)
+        println(book)
+
         Assert.assertEquals("TypeScript Notes for Professionals", book.title)
         Assert.assertEquals("", book.subtitle)
-        Assert.assertEquals("1001622115721", book.isbn13)
+        Assert.assertEquals(1001622115721, book.isbn13)
         Assert.assertEquals("\$0.00", book.price)
         Assert.assertEquals("https://itbook.store/img/books/1001622115721.png", book.image)
         Assert.assertEquals("https://itbook.store/books/1001622115721", book.url)
