@@ -31,23 +31,14 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
     private val _openUrlEvent = MutableLiveData<Event<String>>()
     val openUrlEvent: LiveData<Event<String>> = _openUrlEvent
 
+    private val _openDetailBookEvent = MutableLiveData<Event<Book>>()
+    val openDetailBookEvent = _openDetailBookEvent
+
     private val _dataLoading = MutableLiveData<Boolean>()
 
     fun start() {
         _dataLoading.value = true
-        viewModelScope.launch {
-            try {
-                val bookResponse = repository.getBooks()
-
-                _items.value = bookResponse.books.also {
-                    it.forEach { book -> repository.insertBook(book) }
-                }
-                _dataLoading.value = false
-            } catch (e: Exception) {
-                _toastText.value = Event("Error occured in getting books!")
-                e.printStackTrace()
-            }
-        }
+        refresh()
     }
 
     override fun getBookList(): LiveData<List<Book>> {
@@ -59,10 +50,35 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
     }
 
     override fun openDetailBook(book: Book) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            if (repository.getBookByIsbn(book.isbn13) == null) {
+                repository.insertBook(book)
+            }
+            _openDetailBookEvent.postValue(Event(book))
+        }
     }
 
     override fun openUrl(url: String) {
-        _openUrlEvent.value = Event(url)
+        _openUrlEvent.postValue(Event(url))
+    }
+
+    override fun refresh() {
+        viewModelScope.launch {
+            try {
+                val bookResponse = repository.getBooks()
+                _items.value = bookResponse
+            } catch (e: Exception) {
+                _toastText.value = Event("Error occured in getting books!")
+                e.printStackTrace()
+            } finally {
+                _dataLoading.value = false
+            }
+        }
+    }
+
+    override fun updateBookmark(book: Book, isBookmarked: Boolean) {
+        viewModelScope.launch {
+            repository.updateBookmark(book, isBookmarked)
+        }
     }
 }

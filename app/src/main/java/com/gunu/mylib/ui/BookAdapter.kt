@@ -44,7 +44,7 @@ class BookAdapter(private val bookOpenViewModel: BookOpenViewModel):
 
 class BookDiffCallback : DiffUtil.ItemCallback<Book>() {
     override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.isbn13 == newItem.isbn13
     }
 
     override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {

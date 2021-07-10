@@ -13,4 +13,7 @@ interface BookOpenViewModel {
 
     fun openUrl(url: String)
 
+    fun refresh()
+
+    fun updateBookmark(book: Book, isBookmarked: Boolean)
 }

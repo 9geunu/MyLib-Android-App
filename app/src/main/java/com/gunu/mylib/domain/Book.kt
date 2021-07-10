@@ -1,10 +1,8 @@
 package com.gunu.mylib.domain
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 @Entity(tableName = "book")
 data class Book(

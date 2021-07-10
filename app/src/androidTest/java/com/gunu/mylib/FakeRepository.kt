@@ -17,8 +17,10 @@ package com.gunu.mylib
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.domain.IRepository
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 /**
@@ -30,16 +32,10 @@ class FakeRepository : IRepository {
 
     private val observableBookList = MutableLiveData<List<Book>>()
 
-    override fun observeBooks(): LiveData<List<Book>> {
-        observableBookList.value = BookServiceData.values.toList()
-
-        return observableBookList
-    }
-
-    override fun observeBookmarkedBooks():  LiveData<List<Book>> {
+    override fun observeBookmarkedBooks(): Flow<List<Book>> {
         observableBookList.value = BookServiceData.values.toList().filter { it.isBookmarked }
 
-        return observableBookList
+        return observableBookList.asFlow()
     }
 
     override suspend fun getBooks(): List<Book> {

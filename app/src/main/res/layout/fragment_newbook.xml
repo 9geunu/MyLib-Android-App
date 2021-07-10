@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.gunu.mylib.ui.BookOpenViewModel" />
+
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +16,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.newbook.NewBookFragment">
 
-        <include layout="@layout/fragment_booklist"
-            android:id="@+id/booklist_layout"/>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:refreshing="@{viewModel.isLoading()}"
+            app:onRefreshListener="@{() -> viewModel.refresh()}">
+
+            <include layout="@layout/fragment_booklist"
+                android:id="@+id/booklist_layout"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </layout>

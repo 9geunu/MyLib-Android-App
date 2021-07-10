@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.gunu.mylib.R
 import com.gunu.mylib.databinding.FragmentNewbookBinding
 import com.gunu.mylib.domain.Book
@@ -23,7 +25,7 @@ import com.gunu.mylib.util.getViewModelFactory
 
 class NewBookFragment : Fragment() {
 
-    private val newBookViewModel: NewBookViewModel by viewModels { getViewModelFactory() }
+    private val newBookViewModel: NewBookViewModel by viewModels<NewBookViewModel> { getViewModelFactory() }
 
     private lateinit var viewBinding: FragmentNewbookBinding
 
@@ -35,7 +37,6 @@ class NewBookFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentNewbookBinding.inflate(inflater, container, false).apply {
-            booklistLayout.viewModel = newBookViewModel
             lifecycleOwner = this@NewBookFragment.viewLifecycleOwner
         }
 
@@ -45,19 +46,19 @@ class NewBookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewBinding.viewModel = newBookViewModel
+        viewBinding.booklistLayout.viewModel = newBookViewModel
         setupListAdapter()
         setupToast()
+        setupOpenUrlAction()
+        setupNavigation()
         newBookViewModel.start()
     }
 
     private fun setupListAdapter() {
-        val viewModel = viewBinding.booklistLayout.viewModel
-        if (viewModel != null) {
-            listAdapter = BookAdapter(viewModel)
-            viewBinding.booklistLayout.bookRecyclerView.adapter = listAdapter
-        } else {
-            Log.e("MyLib", "ViewModel not initialized when attempting to set up adapter.")
-        }
+        listAdapter = BookAdapter(newBookViewModel)
+        viewBinding.booklistLayout.bookRecyclerView.itemAnimator = DefaultItemAnimator()
+        viewBinding.booklistLayout.bookRecyclerView.adapter = listAdapter
     }
 
     private fun setupToast() {
@@ -68,11 +69,20 @@ class NewBookFragment : Fragment() {
 
     private fun setupOpenUrlAction() {
         newBookViewModel.openUrlEvent.observe(viewLifecycleOwner, EventObserver {
-            Log.e("MyLib", "Url : $it")
-
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
 
             requireContext().startActivity(intent)
         })
+    }
+
+    private fun setupNavigation() {
+        newBookViewModel.openDetailBookEvent.observe(viewLifecycleOwner, EventObserver {
+            openDetalBook(it)
+        })
+    }
+
+    private fun openDetalBook(book: Book) {
+        val action = NewBookFragmentDirections.actionNavigationNewbookToDetailBookActivity(book.isbn13)
+        findNavController().navigate(action)
     }
 }
