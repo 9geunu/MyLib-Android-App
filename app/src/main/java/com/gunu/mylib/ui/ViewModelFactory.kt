@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gunu.mylib.domain.IRepository
 import com.gunu.mylib.ui.bookmark.BookmarkViewModel
+import com.gunu.mylib.ui.detail.DetailViewModel
 import com.gunu.mylib.ui.newbook.NewBookViewModel
 import com.gunu.mylib.ui.search.SearchViewModel
 
@@ -19,6 +20,8 @@ class ViewModelFactory(
                 SearchViewModel(repository)
             isAssignableFrom(BookmarkViewModel::class.java) ->
                 BookmarkViewModel(repository)
+            isAssignableFrom(DetailViewModel::class.java) ->
+                DetailViewModel(repository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
