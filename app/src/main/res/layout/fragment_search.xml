@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.gunu.mylib.ui.search.ISearchViewModel" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/search_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+<!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/search_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            app:iconifiedByDefault="false"-->
+<!--            app:onQuery="@{viewModel.searchBooks()}"-->
+<!--            app:queryHint="@string/hint_search"-->
+<!--            android:textSize="20sp">-->
+<!--        </androidx.appcompat.widget.SearchView>-->
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_textinput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:hint="@string/hint_search">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/search_book"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:inputType="text"
+                            app:onSearch="@{viewModel.searchBooks()}"
+                            android:text="@={viewModel.query}"
+                            android:imeOptions="actionSearch" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/search_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:refreshing="@{viewModel.isLoading()}"
+            app:onRefreshListener="@{() -> viewModel.refresh()}">
+
+            <include layout="@layout/fragment_booklist"
+                android:id="@+id/booklist_layout"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+</layout>
