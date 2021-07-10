@@ -1,26 +1,24 @@
 package com.gunu.mylib.domain
 
-import androidx.lifecycle.LiveData
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
 
-    fun observeBooks(): LiveData<List<Book>>
+    fun observeBookmarkedBooks(): Flow<List<Book>>
 
-    fun observeBookmarkedBooks(): LiveData<List<Book>>
+    suspend fun getBooks(): List<Book>
 
-    suspend fun getBooks(): BookResponse
+    suspend fun searchBooks(query: String): List<Book>
 
-    suspend fun getBookById(id: Long): Book?
+    suspend fun getBookByIsbn(isbn: Long): Book?
 
     suspend fun insertBook(book: Book)
 
-    suspend fun updateBookmark(id: Long, isBookmarked: Boolean)
+    suspend fun updateBookmark(book: Book, isBookmarked: Boolean)
 
     suspend fun deleteAllBooks()
 
     suspend fun deleteBookmarkedBooks()
 
-    suspend fun deleteBook(id: Long)
+    suspend fun deleteBook(isbn: Long)
 }
