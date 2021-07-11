@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.gunu.mylib.ui.search.ISearchViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/MyLib.Background">
+
+        <LinearLayout
+            android:id="@+id/search_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MyLib.TextInputLayout"
+                android:id="@+id/layout_textinput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/hint_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_book"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:inputType="text"
+                    app:onSearch="@{viewModel.searchBooks()}"
+                    android:text="@={viewModel.query}"
+                    android:imeOptions="actionSearch" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/search_swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:refreshing="@{viewModel.isLoading()}"
+                app:onRefreshListener="@{() -> viewModel.refresh()}">
+
+                <include layout="@layout/fragment_booklist"
+                    android:id="@+id/booklist_layout"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{viewModel.isError() ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_anchor="@id/search_linear_layout"
+            app:layout_anchorGravity="center">
+
+            <ImageView
+                android:id="@+id/search_error_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_baseline_error_outline_24"
+                style="@style/MyLib.BigImage"/>
+
+            <TextView
+                android:id="@+id/search_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/search_error"
+                style="@style/MyLib.TextView"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{viewModel.isBookListEmpty() ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_anchor="@id/search_linear_layout"
+            app:layout_anchorGravity="center">
+
+            <ImageView
+                android:id="@+id/search_empty_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_baseline_search_off_24"
+                style="@style/MyLib.BigImage"/>
+
+            <TextView
+                android:id="@+id/search_empty_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/empty_search"
+                style="@style/MyLib.TextView"/>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.gunu.mylib.ui.BookOpenViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/MyLib.Background"
+        tools:context=".ui.bookmark.BookmarkFragment">
+
+        <include
+            android:id="@+id/booklist_layout"
+            layout="@layout/fragment_bookmarkable_booklist" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{viewModel.isBookListEmpty() ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_anchor="@id/booklist_layout"
+            app:layout_anchorGravity="center">
+
+            <ImageView
+                android:id="@+id/bookmark_empty_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_baseline_bookmark_24"
+                style="@style/MyLib.BigImage"/>
+
+            <TextView
+                android:id="@+id/bookmark_empty_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/empty_bookmark"
+                style="@style/MyLib.TextView"/>
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
