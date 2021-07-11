@@ -16,4 +16,8 @@ interface BookOpenViewModel {
     fun refresh()
 
     fun updateBookmark(book: Book, isBookmarked: Boolean)
+
+    fun isError(): LiveData<Boolean>
+
+    fun isBookListEmpty(): LiveData<Boolean>
 }

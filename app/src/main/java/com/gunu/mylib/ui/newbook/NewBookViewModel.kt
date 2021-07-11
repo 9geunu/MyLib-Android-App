@@ -1,10 +1,7 @@
 package com.gunu.mylib.ui.newbook
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.gunu.mylib.data.Repository
@@ -36,6 +33,12 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
 
     private val _dataLoading = MutableLiveData<Boolean>()
 
+    private val _isError = MutableLiveData<Boolean>()
+
+    private val _isBookListEmpty: LiveData<Boolean> = Transformations.map(_items) {
+        it.isEmpty()
+    }
+
     fun start() {
         _dataLoading.value = true
         refresh()
@@ -63,12 +66,14 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
     }
 
     override fun refresh() {
+        _isError.value = false
         viewModelScope.launch {
             try {
                 val bookResponse = repository.getBooks()
                 _items.value = bookResponse
             } catch (e: Exception) {
                 _toastText.value = Event("Error occured in getting books!")
+                _isError.value = true
                 e.printStackTrace()
             } finally {
                 _dataLoading.value = false
@@ -80,5 +85,13 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
         viewModelScope.launch {
             repository.updateBookmark(book, isBookmarked)
         }
+    }
+
+    override fun isError(): LiveData<Boolean> {
+        return _isError
+    }
+
+    override fun isBookListEmpty(): LiveData<Boolean> {
+        return _isBookListEmpty
     }
 }

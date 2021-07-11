@@ -18,8 +18,10 @@ import com.gunu.mylib.domain.Book
 import com.gunu.mylib.domain.IRepository
 import com.gunu.mylib.data.ServiceLocator
 import com.gunu.mylib.ui.newbook.NewBookFragment
+import com.gunu.mylib.ui.search.SearchFragment
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -31,7 +33,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NewBookFragmentTest {
 
-    private lateinit var repository: IRepository
+    private lateinit var repository: FakeRepository
 
     @Before
     fun initRepository() {
@@ -77,7 +79,6 @@ class NewBookFragmentTest {
         onView(withText("price")).check(matches(isDisplayed()))
         onView(withId(R.id.open_url_button)).check(matches(isDisplayed()))
         onView(withId(R.id.book_image_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.open_url_button)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -109,5 +110,37 @@ class NewBookFragmentTest {
         onView(withText("title")).perform(click())
         assertEquals(navController.currentDestination?.id, R.id.navigation_detailBook)
 
+    }
+
+    @Test
+    fun testError_networkDisconnected() {
+        Assert.assertTrue(!repository.isNetworkConnected())
+
+        runBlocking {
+            repository.insertBook(
+                    Book(
+                            title = "Effective Java, 3rd Edition",
+                            subtitle = "",
+                            isbn13 = 9780134685991,
+                            price = "$38.00",
+                            image = "image",
+                            url = "url",
+                            isBookmarked = false
+                    ))
+        }
+
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+
+        val newFrag = launchFragmentInContainer<NewBookFragment>(Bundle(), R.style.AppTheme)
+
+        newFrag.onFragment { fragment ->
+
+            navController.setGraph(R.navigation.mobile_navigation)
+            navController.setCurrentDestination(R.id.navigation_newbook)
+            Navigation.setViewNavController(fragment.requireView(), navController)
+        }
+
+        onView(withId(R.id.new_error_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.new_error_message)).check(matches(isDisplayed()))
     }
 }

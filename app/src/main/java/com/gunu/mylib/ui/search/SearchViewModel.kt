@@ -1,9 +1,6 @@
 package com.gunu.mylib.ui.search
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.domain.IRepository
 import com.gunu.mylib.ui.Event
@@ -24,6 +21,18 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
 
     private val _dataLoading = MutableLiveData<Boolean>()
 
+    private val _isError = MutableLiveData<Boolean>()
+
+    private val _isBookListEmpty: LiveData<Boolean> = Transformations.switchMap(_items) { list ->
+        Transformations.map(_isError) { error ->
+            if (error) {
+                false
+            } else {
+                list.isEmpty()
+            }
+        }
+    }
+    
     override fun getBookList(): LiveData<List<Book>> {
         return _items
     }
@@ -60,6 +69,7 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
     private var query = MutableLiveData<String>("")
 
     override fun searchBooks() = fun(query: String) {
+        _isError.value = false
         _dataLoading.value = true
         viewModelScope.launch {
             try {
@@ -67,6 +77,7 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
                 _items.value = bookResponse
             } catch (e: Exception) {
                 _toastText.value = Event("Error occured in getting books!")
+                _isError.value = true
                 e.printStackTrace()
             } finally {
                 _dataLoading.value = false
@@ -76,5 +87,13 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
 
     override fun getQuery(): MutableLiveData<String> {
         return query
+    }
+
+    override fun isError(): LiveData<Boolean> {
+        return _isError
+    }
+
+    override fun isBookListEmpty(): LiveData<Boolean> {
+        return _isBookListEmpty
     }
 }

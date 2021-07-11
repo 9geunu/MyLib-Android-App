@@ -23,6 +23,12 @@ class BookmarkViewModel(private val repository: IRepository) : ViewModel(), Book
 
     private val _dataLoading = MutableLiveData<Boolean>()
 
+    private val _isError = MutableLiveData<Boolean>()
+
+    private val _isBookListEmpty: LiveData<Boolean> = Transformations.map(_items) {
+        it.isEmpty()
+    }
+
     override fun getBookList(): LiveData<List<Book>> {
         return _items
     }
@@ -52,5 +58,13 @@ class BookmarkViewModel(private val repository: IRepository) : ViewModel(), Book
         viewModelScope.launch {
             repository.updateBookmark(book, isBookmarked)
         }
+    }
+
+    override fun isError(): LiveData<Boolean> {
+        return _isError
+    }
+
+    override fun isBookListEmpty(): LiveData<Boolean> {
+        return _isBookListEmpty
     }
 }
