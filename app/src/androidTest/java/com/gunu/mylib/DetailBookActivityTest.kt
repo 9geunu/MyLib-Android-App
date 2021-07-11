@@ -146,4 +146,31 @@ class DetailBookActivityTest {
         mainActivityScenario.close()
     }
 
+    @Test
+    fun testMemo() {
+        val mainActivityScenario = ActivityScenario.launch(MainActivity::class.java)
+
+        onView(withId(R.id.book_open_area)).perform(click())
+
+        onView(withText("title")).check(matches(isDisplayed()))
+        onView(withText("subtitle")).check(matches(isDisplayed()))
+        onView(withText("isbn13:1")).check(matches(isDisplayed()))
+        onView(withText("price")).check(matches(isDisplayed()))
+        onView(withId(R.id.big_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.bookmark_button)).check(matches(isNotChecked()))
+
+        onView(withId(R.id.memo_edit)).perform(ViewActions.typeText("Effective Java"))
+
+        onView(withId(R.id.memo_edit)).perform(ViewActions.pressImeActionButton())
+
+        onView(withId(R.id.save_memo_button)).perform(click())
+
+        runBlocking {
+            repository.getBookByIsbn(1)?.memo?.let { Assert.assertEquals("Effective Java", it) }
+        }
+
+        mainActivityScenario.close()
+    }
+
 }

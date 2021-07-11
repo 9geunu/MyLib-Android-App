@@ -59,6 +59,10 @@ class Repository(
         }
     }
 
+    override suspend fun updateMemo(isbn13: Long, memo: String) = withContext(ioDispatcher) {
+        dao.updateMemo(isbn13, memo)
+    }
+
     override suspend fun deleteAllBooks() = withContext(ioDispatcher) {
         dao.deleteAllBooks()
     }

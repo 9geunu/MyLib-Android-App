@@ -20,6 +20,7 @@ data class Book(
     @SerializedName("url")
     val url: String,
     var isBookmarked: Boolean = false,
+    var memo: String? = ""
 ) {
     fun getIsbnString(): String = "isbn13:$isbn13"
 
