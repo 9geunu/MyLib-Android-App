@@ -9,36 +9,16 @@ import com.gunu.mylib.databinding.ItemBookBinding
 import com.gunu.mylib.domain.Book
 
 class BookAdapter(private val bookOpenViewModel: BookOpenViewModel):
-    ListAdapter<Book, BookAdapter.ViewHolder>(BookDiffCallback()) {
+    ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val item = getItem(position)
 
         holder.bind(bookOpenViewModel, item)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
-    }
-
-    class ViewHolder private constructor(val binding: ItemBookBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(viewModel: BookOpenViewModel, item: Book) {
-
-            binding.viewModel = viewModel
-            binding.book = item
-            binding.executePendingBindings()
-        }
-
-        companion object {
-            fun from(parent: ViewGroup): ViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemBookBinding.inflate(layoutInflater, parent, false)
-
-                return ViewHolder(binding)
-            }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
+        return BookViewHolder.from(parent)
     }
 }
 

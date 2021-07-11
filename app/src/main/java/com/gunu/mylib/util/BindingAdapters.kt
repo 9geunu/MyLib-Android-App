@@ -14,12 +14,20 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.ui.BookAdapter
+import com.gunu.mylib.ui.BookmarkableBookAdapter
 
 
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<Book>?) {
     items?.let {
         (listView.adapter as BookAdapter).submitList(items)
+    }
+}
+
+@BindingAdapter("app:bookmarkableItems")
+fun setBookmarkableItems(listView: RecyclerView, items: List<Book>?) {
+    items?.let {
+        (listView.adapter as BookmarkableBookAdapter).submitList(items)
     }
 }
 
