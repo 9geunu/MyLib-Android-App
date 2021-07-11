@@ -1,5 +1,7 @@
 package com.gunu.mylib.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -11,10 +13,7 @@ import com.gunu.mylib.R
 import com.gunu.mylib.databinding.ActivityDetailBookBinding
 import com.gunu.mylib.ui.EventObserver
 import com.gunu.mylib.util.getViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class DetailBookActivity : AppCompatActivity() {
 
@@ -31,11 +30,15 @@ class DetailBookActivity : AppCompatActivity() {
             detailViewModel.start(args.bookIsbn)
 
             withContext(Dispatchers.Main) {
-                viewBinding = DataBindingUtil.setContentView(this@DetailBookActivity, R.layout.activity_detail_book)
+                viewBinding = DataBindingUtil.setContentView(
+                    this@DetailBookActivity,
+                    R.layout.activity_detail_book
+                )
 
                 viewBinding.viewModel = detailViewModel
 
                 setupToast()
+                setupOpenUrlAction()
             }
         }
     }
@@ -46,4 +49,11 @@ class DetailBookActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupOpenUrlAction() {
+        detailViewModel.openUrlEvent.observe(this, EventObserver {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+
+            startActivity(intent)
+        })
+    }
 }

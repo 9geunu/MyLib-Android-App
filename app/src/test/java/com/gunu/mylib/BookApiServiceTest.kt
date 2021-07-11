@@ -58,4 +58,18 @@ class BookApiServiceTest {
             }
         }
     }
+
+    @Test
+    fun testGetDetailBooks() {
+        runBlocking {
+            try {
+                val books = BookApi.retrofitService.getDetailBook(9780134685991.toString())
+                assertNotNull(books)
+
+                print(books)
+            } catch (e: Exception) {
+                fail()
+            }
+        }
+    }
 }

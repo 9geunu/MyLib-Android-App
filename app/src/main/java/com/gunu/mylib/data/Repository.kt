@@ -40,6 +40,11 @@ class Repository(
         return@withContext bookList.toList()
     }
 
+    @Throws(Exception::class)
+    override suspend fun getDetailBook(isbn: String) = withContext(ioDispatcher) {
+        BookApi.retrofitService.getDetailBook(isbn)
+    }
+
     override suspend fun getBookByIsbn(isbn: Long) = withContext(ioDispatcher) {
         dao.getBookByIsbn(isbn)
     }

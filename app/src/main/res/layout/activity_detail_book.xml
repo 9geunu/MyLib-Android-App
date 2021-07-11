@@ -18,112 +18,313 @@
         android:layout_height="match_parent"
         tools:context=".ui.detail.DetailBookActivity">
 
-        <LinearLayout
-            android:id="@+id/detail_linear_layout"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/detail_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/big_image"
+            android:layout_height="wrap_content"
+            app:refreshing="@{viewModel.isLoading()}"
+            app:onRefreshListener="@{() -> viewModel.refresh(viewModel.book.isbn13)}">
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:scaleType="centerCrop"
-                android:layout_height="0dp"
-                app:imageUrl="@{viewModel.book.image}"
-                android:foreground="@drawable/shape_shadow_gradient"
-                android:layout_weight="0.35"/>
-
-            <LinearLayout
-                android:id="@+id/text_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.75"
-                android:padding="@dimen/activity_horizontal_margin"
-                style="@style/MyLib.Background"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/detail_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_horizontal"
-                    android:text="@{viewModel.book.title}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:id="@+id/detail_subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:fontFamily="@font/poppins"
-                    android:gravity="center_horizontal"
-                    android:text="@{viewModel.book.subtitle}"
-                    android:visibility="@{viewModel.book.subtitle.empty ? View.GONE : View.VISIBLE}" />
+                android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:id="@+id/detail_linear_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/detail_isbn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_light"
-                        android:text="@{viewModel.book.isbnString}" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/detail_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/activity_horizontal_margin"
-                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                        android:fontFamily="@font/poppins_light"
-                        android:text="@{viewModel.book.priceString}" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.25">
+
+                        <ImageView
+                            android:id="@+id/big_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            app:imageUrl="@{viewModel.detailBook.image}"
+                            android:foreground="@drawable/shape_shadow_gradient" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardElevation="4dp"
+                            android:layout_gravity="center">
+
+                            <ImageView
+                                android:id="@+id/small_image"
+                                android:layout_width="150dp"
+                                android:layout_height="200dp"
+                                app:imageUrl="@{viewModel.detailBook.image}"
+                                android:scaleType="centerCrop" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:id="@+id/text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.75"
+                        android:visibility="@{viewModel.isError() ? View.GONE : View.VISIBLE}"
+                        style="@style/MyLib.Background"
+                        android:padding="@dimen/activity_horizontal_margin"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/detail_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="center_horizontal"
+                            android:text="@{viewModel.detailBook.title}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                        <TextView
+                            android:id="@+id/detail_subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{viewModel.detailBook.subtitle}"
+                            android:visibility="@{viewModel.detailBook.subtitle.empty ? View.GONE : View.VISIBLE}" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_price_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Price" />
+
+                            <TextView
+                                android:id="@+id/detail_price_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.price}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_rating_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Rating" />
+
+                            <TextView
+                                android:id="@+id/detail_rating_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.ratingString}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_authors_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Author" />
+
+                            <TextView
+                                android:id="@+id/detail_authors_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.authors}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_publisher_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Publisher" />
+
+                            <TextView
+                                android:id="@+id/detail_publisher_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.publisher}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_year_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Published" />
+
+                            <TextView
+                                android:id="@+id/detail_year_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.year}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_pages_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Pages" />
+
+                            <TextView
+                                android:id="@+id/detail_pages_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.pages}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_language_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="Language" />
+
+                            <TextView
+                                android:id="@+id/detail_language_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.language}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_isbn10_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="ISBN-10" />
+
+                            <TextView
+                                android:id="@+id/detail_isbn10_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.isbn10}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/list_item_padding"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/detail_isbn13_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="ISBN-13" />
+
+                            <TextView
+                                android:id="@+id/detail_isbn13_value"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_light"
+                                android:text="@{viewModel.detailBook.isbn13}" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/detail_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:fontFamily="@font/poppins"
+                            android:text="@{viewModel.detailBook.desc}"
+                            android:visibility="@{viewModel.detailBook.desc.empty ? View.GONE : View.VISIBLE}" />
+
+                        <EditText
+                            android:id="@+id/memo_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="350dp"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:hint="@string/hint_memo"
+                            android:gravity="top"
+                            android:text="@={viewModel.memo}"
+                            android:background="@null"/>
+                    </LinearLayout>
                 </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
-                <EditText
-                    android:id="@+id/memo_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:layout_margin="@dimen/activity_vertical_margin"
-                    android:hint="@string/hint_memo"
-                    android:gravity="top"
-                    android:text="@={viewModel.memo}"
-                    android:background="@null"/>
-            </LinearLayout>
-        </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <com.google.android.material.card.MaterialCardView
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/open_url_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="4dp"
-            app:layout_anchor="@id/big_image"
-            app:layout_anchorGravity="center">
-            <ImageView
-                android:id="@+id/small_image"
-                android:layout_width="150dp"
-                android:layout_height="200dp"
-                app:imageUrl="@{viewModel.book.image}"
-                android:scaleType="centerCrop" />
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <LinearLayout
-            android:id="@+id/book_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/small_image"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            app:layout_anchorGravity="center|bottom"
-            android:orientation="vertical">
-
-
-        </LinearLayout>
+            android:src="@drawable/ic_baseline_launch_24"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="168dp"
+            app:layout_anchor="@id/text_layout"
+            app:layout_anchorGravity="end|bottom"
+            android:onClick="@{() -> viewModel.openUrl(viewModel.detailBook.url)}"
+            android:layout_marginRight="24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/save_memo_button"
@@ -134,7 +335,8 @@
             android:layout_marginBottom="96dp"
             app:layout_anchor="@id/text_layout"
             app:layout_anchorGravity="end|bottom"
-            android:onClick="@{() -> viewModel.saveMemo()}" />
+            android:onClick="@{() -> viewModel.saveMemo()}"
+            android:layout_marginRight="24dp" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/bookmark_button"
@@ -148,6 +350,31 @@
             app:book="@{viewModel.book}"
             app:onCheckCanged="@{viewModel.updateBookmark}"
             app:layout_anchorGravity="end|bottom"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{viewModel.isError() ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_anchor="@id/detail_refresh_layout"
+            app:layout_anchorGravity="center">
+
+            <ImageView
+                android:id="@+id/new_error_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_baseline_error_outline_24"
+                style="@style/MyLib.BigImage" />
+
+            <TextView
+                android:id="@+id/new_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/search_error"
+                style="@style/MyLib.TextView"/>
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
