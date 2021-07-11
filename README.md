@@ -11,3 +11,7 @@ Room, LiveData, Flow, ViewModel, Coroutine, Retrofit, Glide 등을 사용했습�
 ## Features
 
 신간 도서 / 도서 검색 / 북마크 / 도서 정보 확인 / 메모 기능을 구현했습니다.
+
+## Branch
+
+과제는 master 브랜치에 제출해두었습니다.
