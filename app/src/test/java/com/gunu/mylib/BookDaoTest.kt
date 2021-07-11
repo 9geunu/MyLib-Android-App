@@ -241,4 +241,25 @@ class BookDaoTest {
         Assert.assertEquals(first.url, book.url)
         Assert.assertEquals(first.isBookmarked, book.isBookmarked)
     }
+
+    @Test
+    fun testUpdateMemo() = runBlocking {
+        val book = Book(
+            title = "title",
+            subtitle = "subtitle",
+            isbn13 = 1,
+            price = "price",
+            image = "image",
+            url = "url",
+            isBookmarked = false
+        )
+
+        database.bookDao().insertBook(book)
+
+        database.bookDao().updateMemo(book.isbn13, "Memo")
+
+        val loaded = database.bookDao().getBookByIsbn(book.isbn13)
+
+        Assert.assertEquals("Memo", loaded?.memo)
+    }
 }
