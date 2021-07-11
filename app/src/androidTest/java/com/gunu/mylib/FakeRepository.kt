@@ -15,13 +15,20 @@
  */
 package com.gunu.mylib
 
-import androidx.lifecycle.LiveData
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
+import androidx.test.platform.app.InstrumentationRegistry
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.domain.IRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
@@ -38,11 +45,17 @@ class FakeRepository : IRepository {
         return observableBookList.asFlow()
     }
 
+    @Throws(Exception::class)
     override suspend fun getBooks(): List<Book> {
+        if (!isNetworkConnected()) throw Exception("Network disconnected")
+
         return BookServiceData.values.toList()
     }
 
+    @Throws(Exception::class)
     override suspend fun searchBooks(query: String): List<Book> {
+        if (!isNetworkConnected()) throw Exception("Network disconnected")
+
         return BookServiceData.values.filter { it.title.contains(query) }
     }
 
@@ -74,5 +87,30 @@ class FakeRepository : IRepository {
         BookServiceData.remove(isbn)
 
         observableBookList.postValue(BookServiceData.values.toList())
+    }
+
+    fun isNetworkConnected(): Boolean {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val cap = cm.getNetworkCapabilities(cm.activeNetwork) ?: return false
+
+            return cap.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val networks: Array<Network> = cm.allNetworks
+
+            for (n in networks) {
+                val nInfo: NetworkInfo? = cm.getNetworkInfo(n)
+                if (nInfo != null && nInfo.isConnected) return true
+            }
+        } else {
+            val networks = cm.allNetworkInfo
+            for (nInfo in networks) {
+                if (nInfo != null && nInfo.isConnected) return true
+            }
+        }
+
+        return false
     }
 }

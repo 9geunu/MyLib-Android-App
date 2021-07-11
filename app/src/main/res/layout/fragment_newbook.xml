@@ -3,27 +3,59 @@
 <layout>
 
     <data>
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.gunu.mylib.ui.BookOpenViewModel" />
 
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.newbook.NewBookFragment">
+        android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <LinearLayout
+            android:id="@+id/new_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:refreshing="@{viewModel.isLoading()}"
-            app:onRefreshListener="@{() -> viewModel.refresh()}">
+            tools:context=".ui.newbook.NewBookFragment">
 
-            <include layout="@layout/fragment_booklist"
-                android:id="@+id/booklist_layout"/>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </LinearLayout>
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:refreshing="@{viewModel.isLoading()}"
+                app:onRefreshListener="@{() -> viewModel.refresh()}">
+
+                <include layout="@layout/fragment_booklist"
+                    android:id="@+id/booklist_layout"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{viewModel.isError() ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_anchor="@id/new_linear_layout"
+            app:layout_anchorGravity="center">
+
+            <ImageView
+                android:id="@+id/new_error_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_baseline_error_outline_24"/>
+
+            <TextView
+                android:id="@+id/new_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/search_error"/>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

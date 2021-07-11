@@ -122,4 +122,21 @@ class BookmarkFragmentTest {
             Assert.assertEquals(0, list.size)
         }
     }
+
+    @Test
+    fun testEmptyBookmarkList() {
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+
+        val bookmarkFrag = launchFragmentInContainer<BookmarkFragment>(Bundle(), R.style.AppTheme)
+
+        bookmarkFrag.onFragment { fragment ->
+
+            navController.setGraph(R.navigation.mobile_navigation)
+            navController.setCurrentDestination(R.id.navigation_bookmark)
+            Navigation.setViewNavController(fragment.requireView(), navController)
+        }
+
+        onView(withId(R.id.bookmark_empty_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.bookmark_empty_message)).check(matches(isDisplayed()))
+    }
 }
