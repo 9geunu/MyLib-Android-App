@@ -51,7 +51,6 @@ class SearchFragment : Fragment() {
         viewBinding.viewModel = searchViewModel
         viewBinding.booklistLayout.viewModel = searchViewModel
         setupListAdapter()
-        setupToast()
         setupOpenUrlAction()
         setupNavigation()
     }
@@ -62,11 +61,6 @@ class SearchFragment : Fragment() {
         viewBinding.booklistLayout.bookRecyclerView.adapter = listAdapter
     }
 
-    private fun setupToast() {
-        searchViewModel.toastText.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        })
-    }
 
     private fun setupOpenUrlAction() {
         searchViewModel.openUrlEvent.observe(viewLifecycleOwner, EventObserver {

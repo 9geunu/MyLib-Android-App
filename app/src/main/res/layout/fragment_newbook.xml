@@ -15,6 +15,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        style="@style/MyLib.Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -48,14 +49,16 @@
                 android:id="@+id/new_error_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_baseline_error_outline_24"/>
+                android:background="@drawable/ic_baseline_error_outline_24"
+                style="@style/MyLib.BigImage" />
 
             <TextView
                 android:id="@+id/new_error_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="@string/search_error"/>
+                android:text="@string/search_error"
+                style="@style/MyLib.TextView"/>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

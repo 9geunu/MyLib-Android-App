@@ -50,7 +50,6 @@ class BookmarkFragment : Fragment() {
         viewBinding.viewModel = bookmarkViewModel
         viewBinding.booklistLayout.viewModel = bookmarkViewModel
         setupListAdapter()
-        setupToast()
         setupOpenUrlAction()
         setupNavigation()
     }
@@ -59,12 +58,6 @@ class BookmarkFragment : Fragment() {
         listAdapter = BookmarkableBookAdapter(bookmarkViewModel)
         viewBinding.booklistLayout.bookRecyclerView.itemAnimator = DefaultItemAnimator()
         viewBinding.booklistLayout.bookRecyclerView.adapter = listAdapter
-    }
-
-    private fun setupToast() {
-        bookmarkViewModel.toastText.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        })
     }
 
     private fun setupOpenUrlAction() {

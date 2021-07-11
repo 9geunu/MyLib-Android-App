@@ -45,10 +45,15 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("app:book", "app:onCheckCanged")
 fun setOnExtendedFloatingActionButtonCheck(efab: ExtendedFloatingActionButton, book: Book?, onCheck: (Book, Boolean) -> Unit) {
-    efab.shrink()
 
     book?.let {
         efab.isChecked = it.isBookmarked
+    }
+
+    if (efab.isChecked) {
+        efab.extend()
+    } else {
+        efab.shrink()
     }
 
     efab.addOnCheckedChangeListener { button, isChecked ->

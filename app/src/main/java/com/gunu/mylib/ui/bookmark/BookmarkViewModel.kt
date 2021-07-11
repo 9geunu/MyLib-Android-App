@@ -12,9 +12,6 @@ class BookmarkViewModel(private val repository: IRepository) : ViewModel(), Book
 
     private var _items: LiveData<List<Book>> = repository.observeBookmarkedBooks().asLiveData(viewModelScope.coroutineContext)
 
-    private val _toastText = MutableLiveData<Event<String>>()
-    val toastText: LiveData<Event<String>> = _toastText
-
     private val _openUrlEvent = MutableLiveData<Event<String>>()
     val openUrlEvent: LiveData<Event<String>> = _openUrlEvent
 

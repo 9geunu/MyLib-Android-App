@@ -49,7 +49,6 @@ class NewBookFragment : Fragment() {
         viewBinding.viewModel = newBookViewModel
         viewBinding.booklistLayout.viewModel = newBookViewModel
         setupListAdapter()
-        setupToast()
         setupOpenUrlAction()
         setupNavigation()
         newBookViewModel.start()
@@ -59,12 +58,6 @@ class NewBookFragment : Fragment() {
         listAdapter = BookAdapter(newBookViewModel)
         viewBinding.booklistLayout.bookRecyclerView.itemAnimator = DefaultItemAnimator()
         viewBinding.booklistLayout.bookRecyclerView.adapter = listAdapter
-    }
-
-    private fun setupToast() {
-        newBookViewModel.toastText.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        })
     }
 
     private fun setupOpenUrlAction() {

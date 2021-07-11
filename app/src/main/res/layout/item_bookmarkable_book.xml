@@ -43,6 +43,7 @@
                 android:textOff=""
                 android:textOn=""
                 android:background="@drawable/selector_bookmark"
+                style="@style/MyLib.SmallImage"
                 android:checked="@{book.bookmarked}"
                 android:onClick="@{(view) -> viewModel.updateBookmark(book, ((CompoundButton)view).isChecked())}"
                 android:layout_gravity="center_vertical"/>
@@ -76,6 +77,7 @@
                         android:layout_marginStart="@dimen/list_item_padding"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:text="@{book.title}"
+                        android:fontFamily="@font/poppins_bold"
                         android:maxLines="1"
                         android:ellipsize="end"/>
 
@@ -89,6 +91,7 @@
                         android:layout_marginLeft="@dimen/list_item_padding"
                         android:layout_marginStart="@dimen/list_item_padding"
                         android:paddingBottom="4dp"
+                        android:fontFamily="@font/poppins"
                         android:visibility="@{book.subtitle.empty ? View.GONE : View.VISIBLE}"
                         android:text="@{book.subtitle}"
                         android:maxLines="1"
@@ -101,6 +104,7 @@
                         app:layout_constraintTop_toBottomOf="@id/subtitle_text_view"
                         app:layout_constraintLeft_toLeftOf="@id/title_text_view"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        android:fontFamily="@font/poppins_light"
                         android:text="@{book.isbnString}"
                         android:maxLines="1"/>
 
@@ -112,6 +116,7 @@
                         app:layout_constraintLeft_toRightOf="@id/isbn_text_view"
                         app:layout_constraintBottom_toBottomOf="@id/isbn_text_view"
                         android:layout_marginLeft="@dimen/list_item_padding"
+                        android:fontFamily="@font/poppins_light"
                         android:layout_marginStart="@dimen/list_item_padding"
                         android:text="@{book.price}"
                         android:maxLines="1"/>
@@ -125,7 +130,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:background="@drawable/ic_baseline_launch_24"/>
+                android:background="@drawable/ic_baseline_launch_24"
+                style="@style/MyLib.SmallImage"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

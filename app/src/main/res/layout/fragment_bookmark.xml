@@ -15,6 +15,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        style="@style/MyLib.Background"
         tools:context=".ui.bookmark.BookmarkFragment">
 
         <include
@@ -34,14 +35,16 @@
                 android:id="@+id/bookmark_empty_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_baseline_bookmark_24"/>
+                android:background="@drawable/ic_baseline_bookmark_24"
+                style="@style/MyLib.BigImage"/>
 
             <TextView
                 android:id="@+id/bookmark_empty_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="@string/empty_bookmark"/>
+                android:text="@string/empty_bookmark"
+                style="@style/MyLib.TextView"/>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
