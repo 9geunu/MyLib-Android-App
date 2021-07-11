@@ -11,6 +11,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.ui.BookAdapter
@@ -44,7 +45,11 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 }
 
 @BindingAdapter("app:book", "app:onCheckCanged")
-fun setOnExtendedFloatingActionButtonCheck(efab: ExtendedFloatingActionButton, book: Book?, onCheck: (Book, Boolean) -> Unit) {
+fun setOnExtendedFloatingActionButtonCheck(
+    efab: ExtendedFloatingActionButton,
+    book: Book?,
+    onCheck: (Book, Boolean) -> Unit
+) {
 
     book?.let {
         efab.isChecked = it.isBookmarked
@@ -70,7 +75,11 @@ fun setOnExtendedFloatingActionButtonCheck(efab: ExtendedFloatingActionButton, b
 }
 
 @BindingAdapter("app:onQuery", "app:onChange")
-fun setOnQueryTextListener(searchView: SearchView, search: (String) -> Unit, onChange: (String) -> Unit) {
+fun setOnQueryTextListener(
+    searchView: SearchView,
+    search: (String) -> Unit,
+    onChange: (String) -> Unit
+) {
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             query?.let {
@@ -94,7 +103,8 @@ fun setOnEditorActionListener(editText: EditText, search: (String) -> Unit) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             search(textView.text.toString())
 
-            val imm = editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(editText.windowToken, 0)
 
             return@OnEditorActionListener true

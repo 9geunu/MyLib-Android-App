@@ -71,6 +71,10 @@ class FakeRepository : IRepository {
         BookServiceData[book.isbn13]?.isBookmarked = isBookmarked
     }
 
+    override suspend fun updateMemo(isbn13: Long, memo: String) {
+        BookServiceData[isbn13]?.memo = memo
+    }
+
     override suspend fun deleteBookmarkedBooks() {
         BookServiceData = BookServiceData.filterValues {
             !it.isBookmarked
