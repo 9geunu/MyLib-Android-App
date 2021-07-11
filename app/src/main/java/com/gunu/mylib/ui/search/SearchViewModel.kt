@@ -10,9 +10,6 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
 
     private var _items = MutableLiveData<List<Book>>()
 
-    private val _toastText = MutableLiveData<Event<String>>()
-    val toastText: LiveData<Event<String>> = _toastText
-
     private val _openUrlEvent = MutableLiveData<Event<String>>()
     val openUrlEvent: LiveData<Event<String>> = _openUrlEvent
 
@@ -76,7 +73,6 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
                 val bookResponse = repository.searchBooks(query)
                 _items.value = bookResponse
             } catch (e: Exception) {
-                _toastText.value = Event("Error occured in getting books!")
                 _isError.value = true
                 e.printStackTrace()
             } finally {

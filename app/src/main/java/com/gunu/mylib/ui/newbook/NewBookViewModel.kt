@@ -22,9 +22,6 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
 
     private var _items = MutableLiveData<List<Book>>()
 
-    private val _toastText = MutableLiveData<Event<String>>()
-    val toastText: LiveData<Event<String>> = _toastText
-
     private val _openUrlEvent = MutableLiveData<Event<String>>()
     val openUrlEvent: LiveData<Event<String>> = _openUrlEvent
 
@@ -72,8 +69,8 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
                 val bookResponse = repository.getBooks()
                 _items.value = bookResponse
             } catch (e: Exception) {
-                _toastText.value = Event("Error occured in getting books!")
                 _isError.value = true
+                _items.value = listOf()
                 e.printStackTrace()
             } finally {
                 _dataLoading.value = false

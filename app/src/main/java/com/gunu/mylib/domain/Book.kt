@@ -22,4 +22,6 @@ data class Book(
     var isBookmarked: Boolean = false,
 ) {
     fun getIsbnString(): String = "isbn13:$isbn13"
+
+    fun getPriceString(): String = if (price.equals("$0.00")) "FREE" else price
 }

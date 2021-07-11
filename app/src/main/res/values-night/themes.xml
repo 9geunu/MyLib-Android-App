@@ -13,4 +13,41 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.MyLib.Custom" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/nightColorPrimary</item>
+        <item name="colorPrimaryVariant">@color/nightColorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/nightColorPrimary</item>
+
+        <item name="colorSecondary">@color/nightColorPrimaryLight</item>
+        <item name="colorSecondaryVariant">@color/nightColorPrimaryLight</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="MyLib"/>
+
+    <style name="MyLib.SmallImage">
+        <item name="backgroundTint">@color/nightColorPrimary</item>
+    </style>
+
+    <style name="MyLib.BigImage">
+        <item name="backgroundTint">@color/nightColorPrimaryDark</item>
+    </style>
+
+    <style name="MyLib.TextView">
+        <item name="android:textColor">@color/nightColorPrimaryDark</item>
+    </style>
+
+    <style name="MyLib.Background">
+        <item name="android:textColor">@color/nightColorPrimaryBackground</item>
+    </style>
+
+    <style name="MyLib.BottomNavigationBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/nightColorPrimary</item>
+    </style>
 </resources>
