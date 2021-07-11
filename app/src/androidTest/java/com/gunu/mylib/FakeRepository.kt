@@ -33,7 +33,7 @@ class FakeRepository : IRepository {
     private val observableBookList = MutableLiveData<List<Book>>()
 
     override fun observeBookmarkedBooks(): Flow<List<Book>> {
-        observableBookList.value = BookServiceData.values.toList().filter { it.isBookmarked }
+        observableBookList.postValue(BookServiceData.values.toList().filter { it.isBookmarked })
 
         return observableBookList.asFlow()
     }
