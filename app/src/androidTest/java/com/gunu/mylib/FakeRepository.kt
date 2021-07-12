@@ -24,10 +24,14 @@ import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.DetailBook
 import com.gunu.mylib.domain.IRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+import kotlin.collections.LinkedHashMap
 
 
 /**
@@ -52,11 +56,30 @@ class FakeRepository : IRepository {
         return BookServiceData.values.toList()
     }
 
+    override suspend fun getMemo(isbn13: Long): String? {
+        return BookServiceData[isbn13]?.memo
+    }
+
     @Throws(Exception::class)
     override suspend fun searchBooks(query: String): List<Book> {
         if (!isNetworkConnected()) throw Exception("Network disconnected")
 
         return BookServiceData.values.filter { it.title.contains(query) }
+    }
+
+    override suspend fun getDetailBook(isbn: String): DetailBook {
+        val detailBook = "{\"error\":\"0\",\"title\":\"Effective Java, 3rd Edition\"," +
+                "\"subtitle\":\"\",\"authors\":\"Joshua Bloch\",\"publisher\":\"Addison-Wesley\"," +
+                "\"language\":\"English\",\"isbn10\":\"0134685997\",\"isbn13\":\"9780134685991\"," +
+                "\"pages\":\"416\",\"year\":\"2017\",\"rating\":\"4\"," +
+                "\"desc\":\"Java has changed dramatically since the previous edition of Effective Java " +
+                "was published shortly after the release of Java 6. This Jolt award-winning classic has now been " +
+                "thoroughly updated to take full advantage of the latest language and library features." +
+                " The support in modern Java for multiple pa...\"," +
+                "\"price\":\"\$38.00\",\"image\":\"https://itbook.store/img/books/9780134685991.png\"," +
+                "\"url\":\"https://itbook.store/books/9780134685991\"}"
+
+        return Gson().fromJson<DetailBook>(detailBook, object : TypeToken<DetailBook>(){}.type)
     }
 
     override suspend fun getBookByIsbn(isbn: Long): Book? {

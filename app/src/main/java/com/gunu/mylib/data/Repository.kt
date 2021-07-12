@@ -22,6 +22,10 @@ class Repository(
         BookApi.retrofitService.getBooks().books
     }
 
+    override suspend fun getMemo(isbn13: Long) = withContext(ioDispatcher) {
+        dao.getMemo(isbn13)
+    }
+
     @Throws(Exception::class)
     override suspend fun searchBooks(query: String) = withContext(ioDispatcher) {
         val bookList = ConcurrentLinkedQueue<Book>()
@@ -38,6 +42,11 @@ class Repository(
         }
 
         return@withContext bookList.toList()
+    }
+
+    @Throws(Exception::class)
+    override suspend fun getDetailBook(isbn: String) = withContext(ioDispatcher) {
+        BookApi.retrofitService.getDetailBook(isbn)
     }
 
     override suspend fun getBookByIsbn(isbn: Long) = withContext(ioDispatcher) {

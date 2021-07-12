@@ -27,7 +27,9 @@ import com.gunu.mylib.ui.MainActivity
 import com.gunu.mylib.ui.detail.DetailBookActivity
 import com.gunu.mylib.ui.detail.DetailBookActivityArgs
 import com.gunu.mylib.ui.newbook.NewBookFragment
+import com.gunu.mylib.ui.search.SearchFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.*
@@ -36,7 +38,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DetailBookActivityTest {
 
-    private lateinit var repository: IRepository
+    private lateinit var repository: FakeRepository
 
     @Before
     fun initRepository() {
@@ -46,10 +48,10 @@ class DetailBookActivityTest {
         runBlocking {
             repository.insertBook(
                     Book(
-                            title = "title",
-                            subtitle = "subtitle",
-                            isbn13 = 1,
-                            price = "price",
+                            title = "Effective Java, 3rd Edition",
+                            subtitle = "",
+                            isbn13 = 9780134685991,
+                            price = "$38.00",
                             image = "image",
                             url = "url",
                             isBookmarked = false
@@ -66,15 +68,27 @@ class DetailBookActivityTest {
 
     @Test
     fun testDetailBookActivity() {
+
         val mainActivityScenario = ActivityScenario.launch(MainActivity::class.java)
 
         onView(withId(R.id.book_open_area)).perform(click())
 
-        onView(withText("title")).check(matches(isDisplayed()))
-        onView(withText("subtitle")).check(matches(isDisplayed()))
-        onView(withText("isbn13:1")).check(matches(isDisplayed()))
-        onView(withText("price")).check(matches(isDisplayed()))
+        onView(withText("Effective Java, 3rd Edition")).check(matches(isDisplayed()))
+        onView(withText("Joshua Bloch")).check(matches(isDisplayed()))
+        onView(withText("Addison-Wesley")).check(matches(isDisplayed()))
+        onView(withText("English")).check(matches(isDisplayed()))
+        onView(withText("0134685997")).check(matches(isDisplayed()))
+        onView(withText("9780134685991")).check(matches(isDisplayed()))
+        onView(withText("416")).check(matches(isDisplayed()))
+        onView(withText("2017")).check(matches(isDisplayed()))
+        onView(withText("4/5")).check(matches(isDisplayed()))
+        onView(withText("Java has changed dramatically since the previous edition of Effective Java was published shortly after the release of Java 6. This Jolt award-winning classic has now been thoroughly updated to take full advantage of the latest language and library features. The support in modern Java for multiple pa...")).check(matches(isDisplayed()))
+        onView(withText("$38.00")).check(matches(isDisplayed()))
         onView(withId(R.id.big_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.memo_edit)).check(matches(isDisplayed()))
         onView(withId(R.id.small_image)).check(matches(isDisplayed()))
         onView(withId(R.id.bookmark_button)).check(matches(isNotChecked()))
 
@@ -87,17 +101,28 @@ class DetailBookActivityTest {
 
         onView(withId(R.id.book_open_area)).perform(click())
 
-        onView(withText("title")).check(matches(isDisplayed()))
-        onView(withText("subtitle")).check(matches(isDisplayed()))
-        onView(withText("isbn13:1")).check(matches(isDisplayed()))
-        onView(withText("price")).check(matches(isDisplayed()))
+        onView(withText("Effective Java, 3rd Edition")).check(matches(isDisplayed()))
+        onView(withText("Joshua Bloch")).check(matches(isDisplayed()))
+        onView(withText("Addison-Wesley")).check(matches(isDisplayed()))
+        onView(withText("English")).check(matches(isDisplayed()))
+        onView(withText("0134685997")).check(matches(isDisplayed()))
+        onView(withText("9780134685991")).check(matches(isDisplayed()))
+        onView(withText("416")).check(matches(isDisplayed()))
+        onView(withText("2017")).check(matches(isDisplayed()))
+        onView(withText("4/5")).check(matches(isDisplayed()))
+        onView(withText("Java has changed dramatically since the previous edition of Effective Java was published shortly after the release of Java 6. This Jolt award-winning classic has now been thoroughly updated to take full advantage of the latest language and library features. The support in modern Java for multiple pa...")).check(matches(isDisplayed()))
+        onView(withText("$38.00")).check(matches(isDisplayed()))
         onView(withId(R.id.big_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.memo_edit)).check(matches(isDisplayed()))
         onView(withId(R.id.small_image)).check(matches(isDisplayed()))
         onView(withId(R.id.bookmark_button)).check(matches(isNotChecked()))
 
-        Espresso.onView(ViewMatchers.withId(R.id.bookmark_button)).perform(ViewActions.click())
+        onView(withId(R.id.bookmark_button)).perform(click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.bookmark_button)).check(ViewAssertions.matches(ViewMatchers.isChecked()))
+        onView(withId(R.id.bookmark_button)).check(matches(isChecked()))
 
         runBlocking {
             repository.getBookByIsbn(1)?.isBookmarked?.let { Assert.assertTrue(it) }
@@ -109,14 +134,12 @@ class DetailBookActivityTest {
     @Test
     fun testUnBookmark() {
         runBlocking {
-            repository.deleteBook(1)
-
             repository.insertBook(
                     Book(
-                            title = "title",
-                            subtitle = "subtitle",
-                            isbn13 = 2,
-                            price = "price",
+                            title = "Effective Java, 3rd Edition",
+                            subtitle = "",
+                            isbn13 = 9780134685991,
+                            price = "$38.00",
                             image = "image",
                             url = "url",
                             isBookmarked = true
@@ -127,11 +150,22 @@ class DetailBookActivityTest {
 
         onView(withId(R.id.book_open_area)).perform(click())
 
-        onView(withText("title")).check(matches(isDisplayed()))
-        onView(withText("subtitle")).check(matches(isDisplayed()))
-        onView(withText("isbn13:2")).check(matches(isDisplayed()))
-        onView(withText("price")).check(matches(isDisplayed()))
+        onView(withText("Effective Java, 3rd Edition")).check(matches(isDisplayed()))
+        onView(withText("Joshua Bloch")).check(matches(isDisplayed()))
+        onView(withText("Addison-Wesley")).check(matches(isDisplayed()))
+        onView(withText("English")).check(matches(isDisplayed()))
+        onView(withText("0134685997")).check(matches(isDisplayed()))
+        onView(withText("9780134685991")).check(matches(isDisplayed()))
+        onView(withText("416")).check(matches(isDisplayed()))
+        onView(withText("2017")).check(matches(isDisplayed()))
+        onView(withText("4/5")).check(matches(isDisplayed()))
+        onView(withText("Java has changed dramatically since the previous edition of Effective Java was published shortly after the release of Java 6. This Jolt award-winning classic has now been thoroughly updated to take full advantage of the latest language and library features. The support in modern Java for multiple pa...")).check(matches(isDisplayed()))
+        onView(withText("$38.00")).check(matches(isDisplayed()))
         onView(withId(R.id.big_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.memo_edit)).check(matches(isDisplayed()))
         onView(withId(R.id.small_image)).check(matches(isDisplayed()))
         onView(withId(R.id.bookmark_button)).check(matches(isChecked()))
 
@@ -140,7 +174,7 @@ class DetailBookActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.bookmark_button)).check(ViewAssertions.matches(ViewMatchers.isNotChecked()))
 
         runBlocking {
-            repository.getBookByIsbn(2)?.isBookmarked?.let { Assert.assertFalse(it) }
+            repository.getBookByIsbn(9780134685991)?.isBookmarked?.let { Assert.assertFalse(it) }
         }
 
         mainActivityScenario.close()
@@ -152,11 +186,22 @@ class DetailBookActivityTest {
 
         onView(withId(R.id.book_open_area)).perform(click())
 
-        onView(withText("title")).check(matches(isDisplayed()))
-        onView(withText("subtitle")).check(matches(isDisplayed()))
-        onView(withText("isbn13:1")).check(matches(isDisplayed()))
-        onView(withText("price")).check(matches(isDisplayed()))
+        onView(withText("Effective Java, 3rd Edition")).check(matches(isDisplayed()))
+        onView(withText("Joshua Bloch")).check(matches(isDisplayed()))
+        onView(withText("Addison-Wesley")).check(matches(isDisplayed()))
+        onView(withText("English")).check(matches(isDisplayed()))
+        onView(withText("0134685997")).check(matches(isDisplayed()))
+        onView(withText("9780134685991")).check(matches(isDisplayed()))
+        onView(withText("416")).check(matches(isDisplayed()))
+        onView(withText("2017")).check(matches(isDisplayed()))
+        onView(withText("4/5")).check(matches(isDisplayed()))
+        onView(withText("Java has changed dramatically since the previous edition of Effective Java was published shortly after the release of Java 6. This Jolt award-winning classic has now been thoroughly updated to take full advantage of the latest language and library features. The support in modern Java for multiple pa...")).check(matches(isDisplayed()))
+        onView(withText("$38.00")).check(matches(isDisplayed()))
         onView(withId(R.id.big_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.small_image)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.memo_edit)).check(matches(isDisplayed()))
         onView(withId(R.id.small_image)).check(matches(isDisplayed()))
         onView(withId(R.id.bookmark_button)).check(matches(isNotChecked()))
 
