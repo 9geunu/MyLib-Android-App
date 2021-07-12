@@ -12,6 +12,8 @@ Room, LiveData, Flow, ViewModel, Coroutine, Retrofit, Glide 등을 사용했습�
 
 신간 도서 / 도서 검색 / 북마크 / 도서 정보 확인 / 메모 기능을 구현했습니다.
 
-## Branch
+## Release Notes
 
-과제는 master 브랜치에 제출해두었습니다.
+- `1.0.0` - 제출 버전 (2021.07.11)
+
+- `1.1.0` - Detail Book API 통신 기능 추가, DetailBookActivity UI 수정 (2021.07.13)
