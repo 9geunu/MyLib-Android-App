@@ -29,6 +29,9 @@ interface BookDao {
     @Query("UPDATE book SET memo = :memo WHERE isbn13 = :isbn13")
     suspend fun updateMemo(isbn13: Long, memo: String)
 
+    @Query("SELECT memo FROM book WHERE isbn13 = :isbn13")
+    suspend fun getMemo(isbn13: Long): String?
+
     @Query("DELETE FROM book")
     suspend fun deleteAllBooks()
 

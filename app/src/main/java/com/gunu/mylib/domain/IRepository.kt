@@ -10,6 +10,8 @@ interface IRepository {
 
     suspend fun searchBooks(query: String): List<Book>
 
+    suspend fun getDetailBook(isbn: String): DetailBook
+
     suspend fun getBookByIsbn(isbn: Long): Book?
 
     suspend fun insertBook(book: Book)
@@ -17,6 +19,8 @@ interface IRepository {
     suspend fun updateBookmark(book: Book, isBookmarked: Boolean)
 
     suspend fun updateMemo(isbn13: Long, memo: String)
+
+    suspend fun getMemo(isbn13: Long): String?
 
     suspend fun deleteAllBooks()
 
