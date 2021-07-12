@@ -16,6 +16,7 @@
         android:id="@+id/detail_coor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        style="@style/MyLib.Background"
         tools:context=".ui.detail.DetailBookActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -51,6 +52,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:cardElevation="4dp"
+                            android:visibility="@{viewModel.isHideTextLayout ? View.GONE : View.VISIBLE}"
                             android:layout_gravity="center">
 
                             <ImageView
@@ -67,8 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0.75"
-                        android:visibility="@{viewModel.isError() ? View.GONE : View.VISIBLE}"
-                        style="@style/MyLib.Background"
+                        android:visibility="@{viewModel.isHideTextLayout ? View.GONE : View.VISIBLE}"
                         android:padding="@dimen/activity_horizontal_margin"
                         android:orientation="vertical" >
 
@@ -87,7 +88,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/activity_vertical_margin"
-                            android:fontFamily="@font/poppins"
+                            android:fontFamily="@font/prompt_semibold"
+                            android:gravity="center_horizontal"
                             android:text="@{viewModel.detailBook.subtitle}"
                             android:visibility="@{viewModel.detailBook.subtitle.empty ? View.GONE : View.VISIBLE}" />
 
@@ -321,7 +323,7 @@
             android:src="@drawable/ic_baseline_launch_24"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="168dp"
-            app:layout_anchor="@id/text_layout"
+            app:layout_anchor="@id/detail_refresh_layout"
             app:layout_anchorGravity="end|bottom"
             android:onClick="@{() -> viewModel.openUrl(viewModel.detailBook.url)}"
             android:layout_marginRight="24dp" />
@@ -333,7 +335,7 @@
             android:src="@drawable/ic_baseline_check_24"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="96dp"
-            app:layout_anchor="@id/text_layout"
+            app:layout_anchor="@id/detail_refresh_layout"
             app:layout_anchorGravity="end|bottom"
             android:onClick="@{() -> viewModel.saveMemo()}"
             android:layout_marginRight="24dp" />
@@ -344,7 +346,7 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:layout_margin="24dp"
-            app:layout_anchor="@id/text_layout"
+            app:layout_anchor="@id/detail_refresh_layout"
             app:icon="@drawable/selector_bookmark"
             android:text="@string/str_bookmarked"
             app:book="@{viewModel.book}"
@@ -361,14 +363,14 @@
             app:layout_anchorGravity="center">
 
             <ImageView
-                android:id="@+id/new_error_image"
+                android:id="@+id/detail_error_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/ic_baseline_error_outline_24"
                 style="@style/MyLib.BigImage" />
 
             <TextView
-                android:id="@+id/new_error_message"
+                android:id="@+id/detail_error_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"

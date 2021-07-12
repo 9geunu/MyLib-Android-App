@@ -1,18 +1,12 @@
 package com.gunu.mylib.ui.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.gunu.mylib.data.remote.BookApi
 import com.gunu.mylib.domain.Book
 import com.gunu.mylib.domain.DetailBook
 import com.gunu.mylib.domain.IRepository
 import com.gunu.mylib.ui.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.Exception
 import kotlin.jvm.Throws
 
@@ -34,17 +28,15 @@ class DetailViewModel(private val repository: IRepository): ViewModel() {
 
     private val _isError = MutableLiveData<Boolean>()
 
-    suspend fun start(isbn: Long) {
-        loadBook(isbn)
-
-        repository.getBookByIsbn(isbn)?.let {
-            this@DetailViewModel.book.postValue(it)
-            this@DetailViewModel.memo.postValue(it.memo)
+    val isHideTextLayout = Transformations.switchMap(_dataLoading) { isLoading ->
+        Transformations.map(_isError) { isError ->
+            isLoading || isError
         }
     }
 
-    fun loadBook(isbn: Long) {
-        _dataLoading.postValue(true)
+    fun start(isbn: Long) {
+        _dataLoading.value = true
+
         refresh(isbn)
     }
 
@@ -55,31 +47,36 @@ class DetailViewModel(private val repository: IRepository): ViewModel() {
     }
 
     fun saveMemo() {
-        val currentBook = detailBook.value
+        val currentBook = book.value
         val currentMemo = memo.value
 
         if (currentBook != null && currentMemo != null) {
             viewModelScope.launch {
-                repository.updateMemo(currentBook.isbn13.toLong(), currentMemo)
+                repository.updateMemo(currentBook.isbn13, currentMemo)
                 _toastText.value = Event("메모가 저장되었습니다.")
             }
         }
     }
 
     fun refresh(isbn: Long) {
-        _isError.postValue(false)
+        _isError.value = false
 
         viewModelScope.launch {
             try {
-                val response = BookApi.retrofitService.getDetailBook(isbn.toString())
-                detailBook.postValue(response)
+                repository.getBookByIsbn(isbn)?.let {
+                    this@DetailViewModel.book.value = it
+                }
+
+                repository.getMemo(isbn)?.let {
+                    this@DetailViewModel.memo.value = it
+                }
+                this@DetailViewModel.detailBook.value = repository.getDetailBook(isbn.toString())
 
             } catch (e: Exception) {
-                _toastText.postValue(Event("도서 정보를 불러오는 중에 오류가 발생했습니다."))
-                _isError.postValue(true)
+                _isError.value = true
                 e.printStackTrace()
             } finally {
-                _dataLoading.postValue(false)
+                _dataLoading.value = false
             }
         }
     }

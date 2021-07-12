@@ -31,6 +31,7 @@ import com.gunu.mylib.domain.DetailBook
 import com.gunu.mylib.domain.IRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+import kotlin.collections.LinkedHashMap
 
 
 /**
@@ -53,6 +54,10 @@ class FakeRepository : IRepository {
         if (!isNetworkConnected()) throw Exception("Network disconnected")
 
         return BookServiceData.values.toList()
+    }
+
+    override suspend fun getMemo(isbn13: Long): String? {
+        return BookServiceData[isbn13]?.memo
     }
 
     @Throws(Exception::class)

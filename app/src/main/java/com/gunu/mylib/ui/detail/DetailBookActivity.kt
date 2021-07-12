@@ -26,21 +26,17 @@ class DetailBookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            detailViewModel.start(args.bookIsbn)
+        viewBinding = DataBindingUtil.setContentView(
+                this@DetailBookActivity,
+                R.layout.activity_detail_book
+        )
 
-            withContext(Dispatchers.Main) {
-                viewBinding = DataBindingUtil.setContentView(
-                    this@DetailBookActivity,
-                    R.layout.activity_detail_book
-                )
+        viewBinding.viewModel = detailViewModel
+        viewBinding.lifecycleOwner = this
 
-                viewBinding.viewModel = detailViewModel
-
-                setupToast()
-                setupOpenUrlAction()
-            }
-        }
+        setupToast()
+        setupOpenUrlAction()
+        detailViewModel.start(args.bookIsbn)
     }
 
     private fun setupToast() {

@@ -20,6 +20,8 @@ interface IRepository {
 
     suspend fun updateMemo(isbn13: Long, memo: String)
 
+    suspend fun getMemo(isbn13: Long): String?
+
     suspend fun deleteAllBooks()
 
     suspend fun deleteBookmarkedBooks()
