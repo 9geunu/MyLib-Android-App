@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.data.local.model.Book
 import kotlinx.coroutines.flow.Flow
 
 @Dao

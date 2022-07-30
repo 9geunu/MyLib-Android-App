@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gunu.mylib.data.local.BookLocalDatabase
-import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.data.local.model.Book
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert

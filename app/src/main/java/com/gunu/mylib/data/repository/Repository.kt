@@ -1,11 +1,13 @@
-package com.gunu.mylib.data
+package com.gunu.mylib.data.repository
 
 import com.gunu.mylib.data.local.BookDao
+import com.gunu.mylib.data.mapper.Mapper
 import com.gunu.mylib.data.remote.BookApi
 import com.gunu.mylib.domain.model.Book
 import com.gunu.mylib.domain.repository.IRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class Repository(
@@ -14,12 +16,14 @@ class Repository(
 ): IRepository {
 
     override fun observeBookmarkedBooks(): Flow<List<Book>> {
-        return dao.observeBookmarkedBooks()
+        return dao.observeBookmarkedBooks().map{ bookList ->
+            bookList.map(Mapper::dataToDomain)
+        }
     }
 
     @Throws(Exception::class)
     override suspend fun getBooks() = withContext(ioDispatcher) {
-        BookApi.retrofitService.getBooks().books
+        BookApi.retrofitService.getBooks().books.map(Mapper::dataToDomain)
     }
 
     override suspend fun getMemo(isbn13: Long) = withContext(ioDispatcher) {
@@ -31,12 +35,12 @@ class Repository(
         val bookList = ConcurrentLinkedQueue<Book>()
 
         val firstResponse = BookApi.retrofitService.searchBook(query, 1)
-        bookList.addAll(firstResponse.books)
+        bookList.addAll(firstResponse.books.map(Mapper::dataToDomain))
 
         coroutineScope {
             (2..firstResponse.getLastPage()).forEach { i ->
                 launch {
-                    bookList.addAll(BookApi.retrofitService.searchBook(query, i.toLong()).books)
+                    bookList.addAll(BookApi.retrofitService.searchBook(query, i).books.map(Mapper::dataToDomain))
                 }
             }
         }
@@ -50,11 +54,11 @@ class Repository(
     }
 
     override suspend fun getBookByIsbn(isbn: Long) = withContext(ioDispatcher) {
-        dao.getBookByIsbn(isbn)
+        dao.getBookByIsbn(isbn)?.let(Mapper::dataToDomain)
     }
 
     override suspend fun insertBook(book: Book) = withContext(ioDispatcher) {
-        dao.insertBook(book)
+        dao.insertBook(Mapper.domainToData(book))
     }
 
     override suspend fun updateBookmark(book: Book, isBookmarked: Boolean) = withContext(ioDispatcher) {
@@ -62,7 +66,7 @@ class Repository(
 
         if (storedBook == null) {
             book.isBookmarked = isBookmarked
-            dao.insertBook(book)
+            dao.insertBook(Mapper.domainToData(book))
         } else {
             dao.updateBookmark(book.isbn13, isBookmarked)
         }
