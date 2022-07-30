@@ -2,8 +2,8 @@ package com.gunu.mylib.data
 
 import com.gunu.mylib.data.local.BookDao
 import com.gunu.mylib.data.remote.BookApi
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.ConcurrentLinkedQueue

@@ -3,7 +3,7 @@ package com.gunu.mylib
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

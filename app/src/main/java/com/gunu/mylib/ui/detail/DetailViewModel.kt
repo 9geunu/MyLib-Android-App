@@ -1,14 +1,12 @@
 package com.gunu.mylib.ui.detail
 
 import androidx.lifecycle.*
-import com.gunu.mylib.data.remote.BookApi
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.DetailBook
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.model.DetailBook
+import com.gunu.mylib.domain.repository.IRepository
+import com.gunu.mylib.domain.usecase.*
 import com.gunu.mylib.ui.Event
 import kotlinx.coroutines.*
-import java.lang.Exception
-import kotlin.jvm.Throws
 
 class DetailViewModel(private val repository: IRepository): ViewModel() {
 
@@ -42,7 +40,7 @@ class DetailViewModel(private val repository: IRepository): ViewModel() {
 
     val updateBookmark: (Book, Boolean) -> Unit = fun(book: Book, isBookmarked: Boolean) {
         viewModelScope.launch {
-            repository.updateBookmark(book, isBookmarked)
+            UpdateBookmarkUseCase(repository, book, isBookmarked).execute()
         }
     }
 
@@ -52,7 +50,7 @@ class DetailViewModel(private val repository: IRepository): ViewModel() {
 
         if (currentBook != null && currentMemo != null) {
             viewModelScope.launch {
-                repository.updateMemo(currentBook.isbn13, currentMemo)
+                UpdateMemoUseCase(repository, currentBook.isbn13, currentMemo).execute()
                 _toastText.value = Event("메모가 저장되었습니다.")
             }
         }
@@ -63,14 +61,17 @@ class DetailViewModel(private val repository: IRepository): ViewModel() {
 
         viewModelScope.launch {
             try {
-                repository.getBookByIsbn(isbn)?.let {
+                GetBookByIsbnUseCase(repository, isbn).execute()?.let {
                     this@DetailViewModel.book.value = it
                 }
 
-                repository.getMemo(isbn)?.let {
+                GetMemoUseCase(repository, isbn).execute()?.let {
                     this@DetailViewModel.memo.value = it
                 }
-                this@DetailViewModel.detailBook.value = repository.getDetailBook(isbn.toString())
+
+                GetDetailBookUseCase(repository, isbn.toString()).execute().also {
+                    this@DetailViewModel.detailBook.value = it
+                }
 
             } catch (e: Exception) {
                 _isError.value = true

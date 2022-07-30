@@ -11,8 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gunu.mylib.data.ServiceLocator
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
 import com.gunu.mylib.ui.search.SearchFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -54,7 +53,8 @@ class SearchFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = false
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -97,7 +97,8 @@ class SearchFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = false
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -144,7 +145,8 @@ class SearchFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = false
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -186,7 +188,8 @@ class SearchFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = false
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())

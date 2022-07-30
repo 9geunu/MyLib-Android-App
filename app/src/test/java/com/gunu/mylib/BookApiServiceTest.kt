@@ -1,15 +1,10 @@
 package com.gunu.mylib
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.gunu.mylib.data.remote.BookApi
-import com.gunu.mylib.domain.Book
 import junit.framework.Assert.*
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
-import java.lang.Exception
 
 class BookApiServiceTest {
 

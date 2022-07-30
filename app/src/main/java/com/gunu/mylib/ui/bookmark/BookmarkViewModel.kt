@@ -1,12 +1,14 @@
 package com.gunu.mylib.ui.bookmark
 
 import androidx.lifecycle.*
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
+import com.gunu.mylib.domain.usecase.GetBookByIsbnUseCase
+import com.gunu.mylib.domain.usecase.InsertBookUseCase
+import com.gunu.mylib.domain.usecase.UpdateBookmarkUseCase
 import com.gunu.mylib.ui.BookOpenViewModel
 import com.gunu.mylib.ui.Event
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class BookmarkViewModel(private val repository: IRepository) : ViewModel(), BookOpenViewModel {
 
@@ -36,9 +38,12 @@ class BookmarkViewModel(private val repository: IRepository) : ViewModel(), Book
 
     override fun openDetailBook(book: Book) {
         viewModelScope.launch {
-            if (repository.getBookByIsbn(book.isbn13) == null) {
-                repository.insertBook(book)
+            val bookByIsbn = GetBookByIsbnUseCase(repository, book.isbn13).execute()
+
+            if (bookByIsbn == null) {
+                InsertBookUseCase(repository, book).execute()
             }
+
             _openDetailBookEvent.postValue(Event(book))
         }
     }
@@ -53,7 +58,7 @@ class BookmarkViewModel(private val repository: IRepository) : ViewModel(), Book
 
     override fun updateBookmark(book: Book, isBookmarked: Boolean) {
         viewModelScope.launch {
-            repository.updateBookmark(book, isBookmarked)
+            UpdateBookmarkUseCase(repository, book, isBookmarked).execute()
         }
     }
 

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gunu.mylib.databinding.ItemBookmarkableBookBinding
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 
 class BookmarkableViewHolder private constructor(val binding: ItemBookmarkableBookBinding) :
         RecyclerView.ViewHolder(binding.root) {

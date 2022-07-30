@@ -1,4 +1,4 @@
-package com.gunu.mylib.domain
+package com.gunu.mylib.domain.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,22 +1,15 @@
 package com.gunu.mylib.ui.newbook
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.gunu.mylib.data.Repository
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
+import com.gunu.mylib.domain.usecase.GetBookByIsbnUseCase
+import com.gunu.mylib.domain.usecase.GetBooksUseCase
+import com.gunu.mylib.domain.usecase.InsertBookUseCase
+import com.gunu.mylib.domain.usecase.UpdateBookmarkUseCase
 import com.gunu.mylib.ui.BookOpenViewModel
 import com.gunu.mylib.ui.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
-import java.lang.Exception
-import java.net.URL
 
 class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookOpenViewModel {
 
@@ -51,9 +44,12 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
 
     override fun openDetailBook(book: Book) {
         viewModelScope.launch {
-            if (repository.getBookByIsbn(book.isbn13) == null) {
-                repository.insertBook(book)
+            val bookByIsbn = GetBookByIsbnUseCase(repository, book.isbn13).execute()
+
+            if (bookByIsbn == null) {
+                InsertBookUseCase(repository, book).execute()
             }
+
             _openDetailBookEvent.postValue(Event(book))
         }
     }
@@ -66,7 +62,7 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
         _isError.value = false
         viewModelScope.launch {
             try {
-                val bookResponse = repository.getBooks()
+                val bookResponse = GetBooksUseCase(repository).execute()
                 _items.value = bookResponse
             } catch (e: Exception) {
                 _isError.value = true
@@ -80,7 +76,7 @@ class NewBookViewModel(private val repository: IRepository) : ViewModel(), BookO
 
     override fun updateBookmark(book: Book, isBookmarked: Boolean) {
         viewModelScope.launch {
-            repository.updateBookmark(book, isBookmarked)
+            UpdateBookmarkUseCase(repository, book, isBookmarked).execute()
         }
     }
 

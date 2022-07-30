@@ -2,7 +2,7 @@ package com.gunu.mylib.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.repository.IRepository
 import com.gunu.mylib.ui.bookmark.BookmarkViewModel
 import com.gunu.mylib.ui.detail.DetailViewModel
 import com.gunu.mylib.ui.newbook.NewBookViewModel

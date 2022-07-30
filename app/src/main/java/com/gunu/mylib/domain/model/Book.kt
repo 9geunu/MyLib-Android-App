@@ -1,4 +1,4 @@
-package com.gunu.mylib.domain
+package com.gunu.mylib.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,13 +1,8 @@
 package com.gunu.mylib.ui
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.gunu.mylib.databinding.ItemBookBinding
-import com.gunu.mylib.databinding.ItemBookmarkableBookBinding
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 
 class BookmarkableBookAdapter(private val bookOpenViewModel: BookOpenViewModel):
     ListAdapter<Book, BookmarkableViewHolder>(BookDiffCallback()) {
