@@ -1,6 +1,7 @@
-package com.gunu.mylib.domain.model
+package com.gunu.mylib.data.remote.model
 
 import com.google.gson.annotations.SerializedName
+import com.gunu.mylib.data.local.model.Book
 
 data class BookResponse(
 

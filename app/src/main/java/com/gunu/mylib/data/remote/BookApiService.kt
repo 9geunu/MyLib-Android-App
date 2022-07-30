@@ -1,6 +1,6 @@
 package com.gunu.mylib.data.remote
 
-import com.gunu.mylib.domain.model.BookResponse
+import com.gunu.mylib.data.remote.model.BookResponse
 import com.gunu.mylib.domain.model.DetailBook
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
