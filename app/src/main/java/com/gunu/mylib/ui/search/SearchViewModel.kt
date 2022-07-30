@@ -1,8 +1,12 @@
 package com.gunu.mylib.ui.search
 
 import androidx.lifecycle.*
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
+import com.gunu.mylib.domain.usecase.GetBookByIsbnUseCase
+import com.gunu.mylib.domain.usecase.InsertBookUseCase
+import com.gunu.mylib.domain.usecase.SearchBooksUseCase
+import com.gunu.mylib.domain.usecase.UpdateBookmarkUseCase
 import com.gunu.mylib.ui.Event
 import kotlinx.coroutines.launch
 
@@ -40,9 +44,12 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
 
     override fun openDetailBook(book: Book) {
         viewModelScope.launch {
-            if (repository.getBookByIsbn(book.isbn13) == null) {
-                repository.insertBook(book)
+            val bookByIsbn = GetBookByIsbnUseCase(repository, book.isbn13).execute()
+
+            if (bookByIsbn == null) {
+                InsertBookUseCase(repository, book).execute()
             }
+
             _openDetailBookEvent.postValue(Event(book))
         }
     }
@@ -59,7 +66,7 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
 
     override fun updateBookmark(book: Book, isBookmarked: Boolean) {
         viewModelScope.launch {
-            repository.updateBookmark(book, isBookmarked)
+            UpdateBookmarkUseCase(repository, book, isBookmarked).execute()
         }
     }
 
@@ -70,7 +77,7 @@ class SearchViewModel(private val repository: IRepository) : ViewModel(), ISearc
         _dataLoading.value = true
         viewModelScope.launch {
             try {
-                val bookResponse = repository.searchBooks(query)
+                val bookResponse = SearchBooksUseCase(repository, query).execute()
                 _items.value = bookResponse
             } catch (e: Exception) {
                 _isError.value = true

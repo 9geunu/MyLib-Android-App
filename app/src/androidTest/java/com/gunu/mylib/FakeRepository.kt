@@ -26,12 +26,10 @@ import androidx.lifecycle.asFlow
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.DetailBook
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.model.DetailBook
+import com.gunu.mylib.domain.repository.IRepository
 import kotlinx.coroutines.flow.Flow
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 
 /**

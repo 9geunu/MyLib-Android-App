@@ -3,7 +3,7 @@ package com.gunu.mylib.data
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.gunu.mylib.data.local.BookLocalDatabase
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.repository.IRepository
 
 object ServiceLocator {
 

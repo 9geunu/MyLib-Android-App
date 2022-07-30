@@ -1,7 +1,7 @@
 package com.gunu.mylib.ui
 
 import androidx.lifecycle.LiveData
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 
 interface BookOpenViewModel {
 

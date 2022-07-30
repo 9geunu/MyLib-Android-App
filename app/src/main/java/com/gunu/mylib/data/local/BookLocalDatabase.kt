@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 
 @Database(entities = [Book::class], version = 4, exportSchema = false)
 public abstract class BookLocalDatabase: RoomDatabase() {

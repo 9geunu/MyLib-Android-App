@@ -1,9 +1,7 @@
 package com.gunu.mylib
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -11,11 +9,10 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gunu.mylib.data.ServiceLocator
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
 import com.gunu.mylib.ui.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -43,7 +40,8 @@ class MainActivityTest {
                             image = "image",
                             url = "url",
                             isBookmarked = true
-                    ))
+                    )
+            )
         }
     }
 

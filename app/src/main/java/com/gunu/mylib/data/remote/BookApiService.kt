@@ -1,9 +1,7 @@
 package com.gunu.mylib.data.remote
 
-import com.google.gson.GsonBuilder
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.BookResponse
-import com.gunu.mylib.domain.DetailBook
+import com.gunu.mylib.domain.model.BookResponse
+import com.gunu.mylib.domain.model.DetailBook
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

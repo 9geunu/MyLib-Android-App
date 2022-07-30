@@ -5,20 +5,16 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gunu.mylib.data.ServiceLocator
-import com.gunu.mylib.domain.Book
-import com.gunu.mylib.domain.IRepository
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.repository.IRepository
 import com.gunu.mylib.ui.bookmark.BookmarkFragment
-import com.gunu.mylib.ui.newbook.NewBookFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -57,7 +53,8 @@ class BookmarkFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = true
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -92,7 +89,8 @@ class BookmarkFragmentTest {
                             image = "image",
                             url = "url",
                             isBookmarked = true
-                    ))
+                    )
+            )
         }
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())

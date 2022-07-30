@@ -8,7 +8,7 @@
 
         <variable
             name="book"
-            type="com.gunu.mylib.domain.Book" />
+            type="com.gunu.mylib.domain.model.Book" />
 
         <variable
             name="viewModel"

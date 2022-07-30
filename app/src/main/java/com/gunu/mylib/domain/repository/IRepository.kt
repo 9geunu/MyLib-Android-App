@@ -1,5 +1,7 @@
-package com.gunu.mylib.domain
+package com.gunu.mylib.domain.repository
 
+import com.gunu.mylib.domain.model.Book
+import com.gunu.mylib.domain.model.DetailBook
 import kotlinx.coroutines.flow.Flow
 
 interface IRepository {

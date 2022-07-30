@@ -1,11 +1,10 @@
 package com.gunu.mylib.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gunu.mylib.domain.Book
+import com.gunu.mylib.domain.model.Book
 import kotlinx.coroutines.flow.Flow
 
 @Dao
